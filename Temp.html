@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ Subtopic Name }}</title>
+ 
+    <!-- This is the CSS code -->
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+   
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 600px;
+    }
+   
+    h3 {
+        text-align: center;
+        color: green;
+    }
+   
+    .form {
+        margin-bottom: 15px;
+    }
+   
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+   
+    input[type="text"] {
+        width: 400px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+ 
+    .matching-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .column {
+            width: 45%;
+        }
+        .draggable {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f0fe;
+            border: 1px solid #90caf9;
+            border-radius: 5px;
+            cursor: grab;
+        }
+        .droppable {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f4c3;
+            border: 1px solid #dce775;
+            border-radius: 5px;
+            min-height: 40px;
+            position: relative;
+        }
+        .droppable.correct {
+            background-color: #a5d6a7;
+            border-color: #66bb6a;
+        }
+        .droppable.wrong {
+            background-color: #ef9a9a;
+            border-color: #e57373;
+        }
+        .drop-feedback {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #333;
+            font-size: 14px;
+        }
+   
+    .quiz-section {
+        margin-bottom: 20px;
+    }
+   
+    .question {
+        margin-bottom: 15px;
+    }
+   
+    .question p {
+        margin: 0 0 10px 0;
+        font-weight: bold;
+    }
+   
+    textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+   
+    button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+   
+    button:hover {
+        opacity: 0.8;
+    }
+   
+    button:active {
+        opacity: 0.6;
+    }
+   
+    #result {
+        margin-top: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+        </style>
+   
+</head>
+<body>
+    <div class="container">
+         <h3>{{ SubTopic Name }}</h3>
+        <div class="form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+ 
+        <!-- Open Answer Quiz -->
+        <div class="quiz-section">
+            <h2>Open Answer Quiz</h2>
+            <div class="question">
+                <p>{{ Question 1 }}</p>
+                <textarea id="oa1" placeholder="Type your answer here..." rows="10"></textarea>
+            </div>
+            <div class="question">
+                <p>{{ Question 2 }}?</p>
+                <textarea id="oa2" placeholder="Type your answer here..." rows="10"></textarea>
+            </div>
+        </div>
+ 
+        <!-- Single Choice Quiz -->
+        <div class="quiz-section">
+            <h4>Single Choice Quiz</h4>
+            <div class="question">
+                <p>{{ Question 1 }}</p>
+                <label><input type="radio" name="sc1" value="{{ Option 1-1 }}">{{ Option 1_1 }}</label>
+                <label><input type="radio" name="sc1" value="{{ Option 1_2 }}">{{ Option 1_2 }}</label>
+                <label><input type="radio" name="sc1" value="{{ Option 1_3 }}">{{ Option 1_3 }}</label>
+<!-- // Add more options here // -->
+            </div>
+            <div class="question">
+                <p>{{ Question 2 }}</p>
+                <label><input type="radio" name="sc2" value="{{ Option 2_1 }}">{{ Option 2_1 }}</label>
+                <label><input type="radio" name="sc2" value="{{ Option 2_2 }}">{{ Option 2_2 }}</label>
+                <label><input type="radio" name="sc2" value="{{ Option 2_3 }}">{{ Option 2_3 }}</label>
+ <!-- // Add more options here// -->
+            </div>
+<!-- // Add more questions here// -->
+        </div>
+ 
+        <!-- Multiple Choice Quiz -->
+        <div class="quiz-section">
+            <h4>Multiple Choice Quiz</h4>
+            <div class="question">
+                <p>{{ Question 1 }}</p>
+                <label><input type="checkbox" name="mcq1" value="{{ Option 1_1 }}">{{ Option 1_1 }}</label>
+                <label><input type="checkbox" name="mcq1" value="{{ Option 1_2 }}">{{ Option 1_2 }}</label>
+                <label><input type="checkbox" name="mcq1" value="{{ Option 1_3 }}">{{ Option 1_3 }}</label>
+                <label><input type="checkbox" name="mcq1" value="{{ Option 1_4 }}">{{ Option 1_4 }}</label>
+        <!-- // Add more options here // -->
+            </div>
+            <div class="question">
+                <p>{{ Question 2 }}</p>
+                <label><input type="checkbox" name="mcq2" value="{{ Option 2_1 }}"> {{ Option 2_1 }}</label>
+                <label><input type="checkbox" name="mcq2" value="{{ Option 2_2 }}"> {{ Option 2_2 }}</label>
+                <label><input type="checkbox" name="mcq2" value="{{ Option 2_3 }}"> {{ Option 2_3 }}</label>
+                <label><input type="checkbox" name="mcq2" value="{{ Option 2_4 }}"> {{ Option 2_4 }}</label>
+            </div>
+        <!-- // Add more options here // -->
+        </div>
+ 
+ 
+        <!-- Drag and Drop -->
+        <h4>Matching (Quiz)</h4>
+        <p>ပေးထားသောအကြောင်းအရာများကိုဖတ်၍ သင့်တော်ရာကို ယှဉ်တွဲပါ။</p>
+        <div class="matching-container">
+            <div class="column" id="options">
+                <div class="draggable" draggable="true" id="answer-1" data-answer="{{ Option 1 }}">{{ Option 1 }}</div>
+                <div class="draggable" draggable="true" id="answer-2" data-answer="{{ Option 2 }}">{{ Option 2 }}</div>
+                <div class="draggable" draggable="true" id="answer-3" data-answer="{{ Option 3 }}">{{ Option 3 }}</div>
+                <div class="draggable" draggable="true" id="answer-4" data-answer="{{ Option 4 }}">{{ Option 4 }}</div>
+                <div class="draggable" draggable="true" id="answer-5" data-answer="{{ Option 5 }}">{{ Option 5 }}</div>
+            <!-- Add more options here -->
+            </div>
+            <div class="column" id="questions">
+                <div class="droppable" data-answer="{{ Question 1 }}">{{ Question 1 }}</div>
+                <div class="droppable" data-answer="{{ Question 2 }}">{{ Question 2 }}</div>
+                <div class="droppable" data-answer="{{ Question 3 }}">{{ Question 3 }}</div>
+                <div class="droppable" data-answer="{{ Question 4 }}">{{ Question 4 }}</div>
+                <div class="droppable" data-answer="{{ Question 5 }}">{{ Question 5 }}</div>
+            <!-- Add more questions here -->
+            </div>
+        </div>
+ 
+        <button id="submitBtn">Submit</button>
+        <button id="exportBtn">Export Results</button>
+        <div id="result"></div>
+        <p id="submissionMessage" style="color: red; font-weight: bold;"></p>
+    </div>
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            const username = document.getElementById('username').value;
+
+            // Collect open-answer answers
+            const openAnswer = {
+                oa1: document.getElementById('oa1').value.trim(),
+                oa2: document.getElementById('oa2').value.trim(),
+            };
+
+            // Collect single-choice answers
+            const singleChoice = {
+                sc1: document.querySelector('input[name="sc1"]:checked')?.value,
+                sc2: document.querySelector('input[name="sc2"]:checked')?.value,
+            };
+
+            const correctAnswers = {
+                sc1: '{{ Correct Answer of Q1 }}',
+                sc2: '{{ Correct Answer of Q2 }}'
+            };
+            let score = 0;
+
+            for (const key in singleChoice) {
+                if (singleChoice[key] === correctAnswers[key]) {
+                    score++;
+                }
+            }
+
+            document.getElementById('result').innerText = `Hello, ${username}! You scored ${score} out of 5.`;
+
+            // Collect multiple-choice answers
+            const multipleChoice = {
+                mcq1: Array.from(document.querySelectorAll('input[name="mcq1"]:checked')).map(input => input.value),
+                mcq2: Array.from(document.querySelectorAll('input[name="mcq2"]:checked')).map(input => input.value),
+            };
+
+            // Collect Drag-and-Drop answers
+            let userAnswers = {};
+
+            document.querySelectorAll(".draggable").forEach(item => {
+                item.addEventListener("dragstart", function (event) {
+                    event.dataTransfer.setData("text", event.target.id);
+                });
+            });
+
+            document.querySelectorAll(".droppable").forEach(zone => {
+                zone.addEventListener("dragover", function (event) {
+                    event.preventDefault();
+                });
+
+                zone.addEventListener("drop", function (event) {
+                    event.preventDefault();
+                    const data = event.dataTransfer.getData("text");
+                    const draggedElement = document.getElementById(data);
+
+                    if (!this.querySelector(".draggable")) {
+                        this.appendChild(draggedElement);
+                        const questionNumber = this.getAttribute("data-answer");
+                        userAnswers[questionNumber] = draggedElement.innerText;
+                    }
+                });
+            });
+
+            // Display result (for demonstration purposes)
+            document.getElementById('result').innerText = `Hello, ${username}! Your answers have been submitted.`;
+
+            // Disable inputs and submit button after submission
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.disabled = true;
+            });
+
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.disabled = true;
+            });
+
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.disabled = true;
+            });
+
+            const submitButton = document.getElementById('submitBtn');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitted';
+
+            // Store a flag in localStorage to prevent re-submission
+            localStorage.setItem('quizSubmitted', true);
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', async function () {
+            const username = document.getElementById('username').value;
+
+            // Collect open-answer answers
+            const openAnswer = {
+                oa1: document.getElementById('oa1').value.trim(),
+                oa2: document.getElementById('oa2').value.trim(),
+            };
+
+            // Collect single-choice answers
+            const singleChoice = {
+                sc1: document.querySelector('input[name="sc1"]:checked')?.value,
+                sc2: document.querySelector('input[name="sc2"]:checked')?.value,
+            };
+
+            // Collect multiple-choice answers
+            const multipleChoice = {
+                mcq1: Array.from(document.querySelectorAll('input[name="mcq1"]:checked')).map(input => input.value),
+                mcq2: Array.from(document.querySelectorAll('input[name="mcq2"]:checked')).map(input => input.value),
+            };
+
+            // Collect Drag-and-Drop answers
+            const matchingAnswers = [];
+            document.querySelectorAll(".droppable").forEach(zone => {
+                let questionText = zone.innerText.trim();
+                let answerText = zone.querySelector(".draggable") ? zone.querySelector(".draggable").innerText.trim() : "No answer";
+                matchingAnswers.push({
+                    question: questionText,
+                    userAnswer: answerText
+                });
+            });
+
+            // Structure all quiz data
+            const quizData = {
+                username: username,
+                courseName: "Course Name + Module Number",
+                lessonId: "Subtopic Name",
+                quizId: "Quiz Numbers",
+                openAnswer: openAnswer,
+                singleChoice: singleChoice,
+                multipleChoice: multipleChoice,
+                matchingQuiz: matchingAnswers,
+            };
+
+            // Convert to JSON
+            const jsonData = JSON.stringify(quizData, null, 2);
+
+            try {
+                // Ask user to pick a directory
+                const dirHandle = await window.showDirectoryPicker();
+
+                let fileIndex = 1;
+                let fileName = 'Subtopic Number.json';
+                let fileHandle;
+
+                // Check if file with the same name exists and increment the index
+                while (true) {
+                    try {
+                        fileHandle = await dirHandle.getFileHandle(fileName);
+                        fileName = `Subtopic Number(${fileIndex}).json`;
+                        fileIndex++;
+                    } catch (error) {
+                        // File does not exist, break the loop
+                        break;
+                    }
+                }
+
+                // Create a file inside the selected directory
+                fileHandle = await dirHandle.getFileHandle(fileName, { create: true });
+
+                // Write JSON data to the file
+                const writable = await fileHandle.createWritable();
+                await writable.write(jsonData);
+                await writable.close();
+
+                console.log("File saved successfully!");
+                alert("File saved successfully!");
+            } catch (error) {
+                console.error("Error saving file:", error);
+                alert("Failed to save file.");
+            }
+        });
+    </script>
+</body>
+</html>
