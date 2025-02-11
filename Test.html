@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ Subtopic Name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: auto;
+            width: 1200px;
+        }
+        .container {
+            background-color: #f4f4f4;
+            padding: 40px;
+            margin: 40px;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 1200px;
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        h3 {
+            text-align: center;
+            color: green;
+        }
+        .form {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 400px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .matching-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .column {
+            width: 45%;
+        }
+        .draggable {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f0fe;
+            border: 1px solid #90caf9;
+            border-radius: 5px;
+            cursor: grab;
+        }
+        .droppable {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f4c3;
+            border: 1px solid #dce775;
+            border-radius: 5px;
+            min-height: 40px;
+            position: relative;
+        }
+        .droppable.correct {
+            background-color: #a5d6a7;
+            border-color: #66bb6a;
+        }
+        .droppable.wrong {
+            background-color: #ef9a9a;
+            border-color: #e57373;
+        }
+        .drop-feedback {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #333;
+            font-size: 14px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        button:active {
+            opacity: 0.6;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>{{ Subtopic Name }}</h3>
+        <div class="form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter Your Name">
+        </div>
+        <h4>Matching (Quiz)</h4>
+        <p>ပေးထားသောအကြောင်းအရာများကိုဖတ်၍ သင့်တော်ရာကို ယှဉ်တွဲပါ။</p>
+        <div class="matching-container">
+            <div class="column" id="options">
+                <div class="draggable" draggable="true" id="answer-1" data-answer="{{ Option 1 }}">{{ Option 1 }}</div>
+                <div class="draggable" draggable="true" id="answer-2" data-answer="{{ Option 2 }}">{{ Option 2 }}</div>
+                <div class="draggable" draggable="true" id="answer-3" data-answer="{{ Option 3 }}">{{ Option 3 }}</div>
+                <div class="draggable" draggable="true" id="answer-4" data-answer="{{ Option 4 }}">{{ Option 4 }}</div>
+                <div class="draggable" draggable="true" id="answer-5" data-answer="{{ Option 5 }}">{{ Option 5 }}</div>
+            </div>
+            <div class="column" id="questions">
+                <div class="droppable" data-answer="{{ Question 1 }}">{{ Question 1 }}</div>
+                <div class="droppable" data-answer="{{ Question 2 }}">{{ Question 2 }}</div>
+                <div class="droppable" data-answer="{{ Question 3 }}">{{ Question 3 }}</div>
+                <div class="droppable" data-answer="{{ Question 4 }}">{{ Question 4 }}</div>
+                <div class="droppable" data-answer="{{ Question 5 }}">{{ Question 5 }}</div>
+            </div>
+        </div>
+        <button id="submitBtn">Submit</button>
+        <button id="exportBtn">Export Results</button>
+        <div id="result"></div>
+        <p id="submissionMessage" style="color: red; font-weight: bold;"></p>
+    </div>
+    <script>
+        let userAnswers = {};
+
+        document.querySelectorAll(".draggable").forEach(item => {
+            item.addEventListener("dragstart", function (event) {
+                event.dataTransfer.setData("text", event.target.id);
+            });
+        });
+
+        document.querySelectorAll(".droppable").forEach(zone => {
+            zone.addEventListener("dragover", function (event) {
+                event.preventDefault();
+            });
+
+            zone.addEventListener("drop", function (event) {
+                event.preventDefault();
+                const data = event.dataTransfer.getData("text");
+                const draggedElement = document.getElementById(data);
+
+                if (!this.querySelector(".draggable")) {
+                    this.appendChild(draggedElement);
+                    const questionNumber = this.getAttribute("data-answer");
+                    userAnswers[questionNumber] = draggedElement.innerText;
+                }
+            });
+        });
+
+        document.getElementById("submitBtn").addEventListener("click", checkAnswers);
+        document.getElementById("exportBtn").addEventListener("click", exportAllResults);
+
+        function checkAnswers() {
+            const correctAnswers = {
+                1: "{{ Correct Answer of Question 1 }}",
+                2: "{{ Correct Answer of Question 2 }}",
+                3: "{{ Correct Answer of Question 3 }}",
+                4: "{{ Correct Answer of Question 4 }}",
+                5: "{{ Correct Answer of Question 5 }}"
+            };
+
+            let score = 0;
+            let totalQuestions = Object.keys(correctAnswers).length;
+            let feedbackText = "";
+
+            Object.keys(correctAnswers).forEach((key) => {
+                if (userAnswers[key] === correctAnswers[key]) {
+                    score++;
+                    feedbackText += `✔ Question ${key}: You nailed it! (${userAnswers[key]})<br>`;
+                } else {
+                    feedbackText += `✖ Question ${key}: Incorrect. You chose (${userAnswers[key] || "No answer"}), the correct answer is (${correctAnswers[key]})<br>`;
+                }
+            });
+
+            document.getElementById("result").innerHTML = `<strong>Score: ${score}/${totalQuestions}</strong><br><br>${feedbackText}`;
+        }
+
+        async function exportAllResults() {
+            const matchingAnswers = [];
+
+            document.querySelectorAll(".droppable").forEach(zone => {
+                let questionText = zone.innerText.trim();
+                let answerText = zone.querySelector(".draggable") ? zone.querySelector(".draggable").innerText.trim() : "No answer";
+                matchingAnswers.push({
+                    question: questionText,
+                    userAnswer: answerText
+                });
+            });
+
+            const allResults = {
+                timestamp: new Date().toISOString(),
+                matchingQuiz: matchingAnswers,
+            };
+
+            const jsonData = JSON.stringify(allResults, null, 2);
+
+            try {
+                const dirHandle = await window.showDirectoryPicker();
+                let fileIndex = 1;
+                let fileName = `{{ Subtopic Name }}.json`;
+                let fileHandle;
+
+                while (true) {
+                    try {
+                        fileHandle = await dirHandle.getFileHandle(fileName);
+                        fileName = `{{ Subtopic Name }}(${fileIndex}).json`;
+                        fileIndex++;
+                    } catch (error) {
+                        break;
+                    }
+                }
+
+                fileHandle = await dirHandle.getFileHandle(fileName, { create: true });
+                const writable = await fileHandle.createWritable();
+                await writable.write(jsonData);
+                await writable.close();
+
+                console.log("File saved successfully!");
+            } catch (error) {
+                console.error("Error saving file:", error);
+            }
+        }
+    </script>
+</body>
+</html>
